@@ -5,7 +5,8 @@ from main.models import Usuario
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, generics
+from rest_framework import status, generics, permissions
+from rest_framework.generics import ListAPIView 
 
 
 class UsuarioViewSet(viewsets.ModelViewSet):
@@ -13,10 +14,36 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
-class UsuarioListView(APIView):
+
+class MinhaPermissao(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        print(request.method)
+
+        if request.method == 'POST':
+            return request.user.is_authenticated
+
+        elif request.method == 'GET':
+            return True
+
+        else:
+            return False
+
+        if request.user.is_authenticated:
+            return True
+
+
+class UsuarioListView(ListAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
         usuarios = Usuario.objects.all()
+        page = self.paginate_queryset(usuarios)
+        if page is not None:
+            serializer = UsuarioSerializer(page, many=True, context={'request': request})
+            return self.get_paginated_response(serializer.data)
+
         serializer = UsuarioSerializer(usuarios, many=True, context={'request': request})
 
         return Response(serializer.data)
@@ -40,6 +67,8 @@ class UsuarioListView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UsuarioDetailView(APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
 
     def _get_object(self, pk):
         try:

@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from main.views import UsuarioViewSet
+from rest_framework.authtoken.views import obtain_auth_token
 
 #router = routers.DefaultRouter()
 #router.register(r'usuarios', UsuarioViewSet)
@@ -24,5 +25,6 @@ from main.views import UsuarioViewSet
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('main/', include('main.urls')),
+    path('api-token/', obtain_auth_token, name='api_token_auth'),
     #path('api/', include(router.urls)),
 ]
