@@ -1,0 +1,4 @@
+Django
+Pillow
+djangorestframework
+mysqlclient==1.4.6
