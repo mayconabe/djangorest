@@ -57,8 +57,11 @@ class UsuarioListView(ListAPIView):
             'data_nasc': request.data['data_nasc'] if 'data_nasc' in request.data else '1900-01-01',
             'is_admin': request.data['is_admin'],
         }
+        serializer_context = {
+            'request': request,
+        }
         print(new_dict)
-        serializer = UsuarioSerializer(data=new_dict)
+        serializer = UsuarioSerializer(data=new_dict, context=serializer_context)
 
         if serializer.is_valid():
             serializer.save()
