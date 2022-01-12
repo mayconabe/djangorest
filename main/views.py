@@ -15,27 +15,27 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
 
 
-class MinhaPermissao(permissions.BasePermission):
+# class MinhaPermissao(permissions.BasePermission):
 
-    def has_permission(self, request, view):
-        print(request.method)
+#     def has_permission(self, request, view):
+#         print(request.method)
 
-        if request.method == 'POST':
-            return request.user.is_authenticated
+#         if request.method == 'POST':
+#             return request.user.is_authenticated
 
-        elif request.method == 'GET':
-            return True
+#         elif request.method == 'GET':
+#             return True
 
-        else:
-            return False
+#         else:
+#             return False
 
-        if request.user.is_authenticated:
-            return True
+#         if request.user.is_authenticated:
+#             return True
 
 
 class UsuarioListView(ListAPIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
         usuarios = Usuario.objects.all()
@@ -71,7 +71,7 @@ class UsuarioListView(ListAPIView):
 
 class UsuarioDetailView(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def _get_object(self, pk):
         try:
